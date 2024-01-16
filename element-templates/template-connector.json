@@ -1,8 +1,8 @@
 {
   "$schema" : "https://unpkg.com/@camunda/zeebe-element-templates-json-schema/resources/schema.json",
-  "name" : "Template connector",
+  "name" : "Redis connector",
   "id" : "io.camunda.connector.Template.v1",
-  "description" : "Describe this connector",
+  "description" : "Redis connector allows to interact with Redis cache. It supports get (read) and put (write) operations. The data format is JSON.",
   "documentationRef" : "https://docs.camunda.io/docs/components/connectors/out-of-the-box-connectors/available-connectors-overview/",
   "version" : 1,
   "category" : {
