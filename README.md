@@ -1,4 +1,4 @@
-> A Connector template for new C8 outbound connector
+> Redis Connector built using the Connector template for new C8 outbound connector
 >
 > To use this template update the following resources to match the name of your connector:
 >
