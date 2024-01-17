@@ -103,6 +103,20 @@
       "value" : "PUT"
     } ]
   }, {
+    "id" : "key",
+    "label" : "Key",
+    "optional" : false,
+    "constraints" : {
+      "notEmpty" : true
+    },
+    "feel" : "optional",
+    "group" : "compose",
+    "binding" : {
+      "name" : "key",
+      "type" : "zeebe:input"
+    },
+    "type" : "Text"
+  }, {
     "id" : "resultVariable",
     "label" : "Result variable",
     "description" : "Name of variable to store the response in",

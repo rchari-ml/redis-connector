@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 
 @OutboundConnector(
     name = "MYCONNECTOR",
-    inputVariables = {"authentication", "message", "operation" },
+    inputVariables = {"authentication", "message", "operation", "key" },
     type = "io.camunda:template:1")
 @ElementTemplate(
     id = "io.camunda.connector.Template.v1",

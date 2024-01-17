@@ -20,7 +20,7 @@ public class MyFunctionTest {
   void shouldReturnReceivedMessageWhenExecute() throws Exception {
     // given
     var input = new MyConnectorRequest(
-            "Hello World!", OperationType.GET,
+            "Hello World!", OperationType.GET, "key",
             new Authentication("testUser", "testToken")
     );
     var function = new MyConnectorFunction();
@@ -40,7 +40,7 @@ public class MyFunctionTest {
   void shouldThrowWithErrorCodeWhenMessageStartsWithFail() throws Exception {
     // given
     var input = new MyConnectorRequest(
-            "Fail: unauthorized", OperationType.GET,
+            "Fail: unauthorized", OperationType.GET,  "key",
             new Authentication("testUser", "testToken")
     );
     var function = new MyConnectorFunction();
