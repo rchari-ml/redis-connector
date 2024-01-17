@@ -9,6 +9,7 @@ import io.camunda.connector.api.error.ConnectorInputException;
 import io.camunda.connector.test.outbound.OutboundConnectorContextBuilder;
 import io.camunda.example.dto.Authentication;
 import io.camunda.example.dto.MyConnectorRequest;
+import io.camunda.example.dto.OperationType;
 import org.junit.jupiter.api.Test;
 
 public class MyRequestTest {
@@ -19,7 +20,7 @@ public class MyRequestTest {
   void shouldReplaceTokenSecretWhenReplaceSecrets() throws JsonProcessingException {
     // given
     var input = new MyConnectorRequest(
-            "Hello World!",
+            "Hello World!", OperationType.GET,
             new Authentication("testUser", "secrets.MY_TOKEN")
     );
     var context = OutboundConnectorContextBuilder.create()
@@ -39,7 +40,7 @@ public class MyRequestTest {
   void shouldFailWhenValidate_NoAuthentication() throws JsonProcessingException {
     // given
     var input = new MyConnectorRequest(
-            "Hello World!",
+            "Hello World!", OperationType.GET,
             null
     );
     var context = OutboundConnectorContextBuilder.create().variables(objectMapper.writeValueAsString(input)).build();
@@ -54,7 +55,7 @@ public class MyRequestTest {
   void shouldFailWhenValidate_NoToken() throws JsonProcessingException {
     // given
     var input = new MyConnectorRequest(
-            "Hello World!",
+            "Hello World!", OperationType.GET,
             new Authentication("testUser", null)
     );
     var context = OutboundConnectorContextBuilder.create().variables(objectMapper.writeValueAsString(input)).build();
@@ -69,7 +70,7 @@ public class MyRequestTest {
   void shouldFailWhenValidate_NoMesage() throws JsonProcessingException {
     // given
     var input = new MyConnectorRequest(
-            null,
+            null, OperationType.GET,
             new Authentication("testUser", "testToken")
     );
     var context = OutboundConnectorContextBuilder.create().variables(objectMapper.writeValueAsString(input)).build();
@@ -84,7 +85,7 @@ public class MyRequestTest {
   void shouldFailWhenValidate_TokenEmpty() throws JsonProcessingException {
     // given
     var input = new MyConnectorRequest(
-            "foo",
+            "foo", OperationType.GET,
             new Authentication("testUser", "")
     );
     var context = OutboundConnectorContextBuilder.create().variables(objectMapper.writeValueAsString(input)).build();

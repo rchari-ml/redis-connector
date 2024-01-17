@@ -9,6 +9,7 @@ import io.camunda.connector.test.outbound.OutboundConnectorContextBuilder;
 import io.camunda.example.dto.Authentication;
 import io.camunda.example.dto.MyConnectorRequest;
 import io.camunda.example.dto.MyConnectorResult;
+import io.camunda.example.dto.OperationType;
 import org.junit.jupiter.api.Test;
 
 public class MyFunctionTest {
@@ -19,7 +20,7 @@ public class MyFunctionTest {
   void shouldReturnReceivedMessageWhenExecute() throws Exception {
     // given
     var input = new MyConnectorRequest(
-            "Hello World!",
+            "Hello World!", OperationType.GET,
             new Authentication("testUser", "testToken")
     );
     var function = new MyConnectorFunction();
@@ -39,7 +40,7 @@ public class MyFunctionTest {
   void shouldThrowWithErrorCodeWhenMessageStartsWithFail() throws Exception {
     // given
     var input = new MyConnectorRequest(
-            "Fail: unauthorized",
+            "Fail: unauthorized", OperationType.GET,
             new Authentication("testUser", "testToken")
     );
     var function = new MyConnectorFunction();

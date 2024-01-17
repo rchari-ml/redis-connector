@@ -80,6 +80,29 @@
     },
     "type" : "Text"
   }, {
+    "id" : "operation",
+    "label" : "Operation",
+    "optional" : false,
+    "constraints" : {
+      "notEmpty" : true
+    },
+    "group" : "compose",
+    "binding" : {
+      "name" : "operation",
+      "type" : "zeebe:input"
+    },
+    "type" : "Dropdown",
+    "choices" : [ {
+      "name" : "DELETE",
+      "value" : "DELETE"
+    }, {
+      "name" : "GET",
+      "value" : "GET"
+    }, {
+      "name" : "PUT",
+      "value" : "PUT"
+    } ]
+  }, {
     "id" : "resultVariable",
     "label" : "Result variable",
     "description" : "Name of variable to store the response in",

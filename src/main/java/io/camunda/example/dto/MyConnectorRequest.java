@@ -6,6 +6,8 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
+
 public record MyConnectorRequest(
-    @NotEmpty @TemplateProperty(group = "compose", type = PropertyType.Text) String message,
+    @NotEmpty @TemplateProperty(group = "compose", type = PropertyType.Text)     String message,
+    @NotNull  @TemplateProperty(group = "compose", type = PropertyType.Dropdown) OperationType operation,
     @Valid @NotNull Authentication authentication) {}
