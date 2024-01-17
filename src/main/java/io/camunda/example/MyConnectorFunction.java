@@ -16,9 +16,9 @@ import org.slf4j.LoggerFactory;
     type = "io.camunda:template:1")
 @ElementTemplate(
     id = "io.camunda.connector.Template.v1",
-    name = "Template connector",
+    name = "Redis connector",
     version = 1,
-    description = "Describe this connector",
+    description = "Redis connector allows to interact with Redis cache. It supports get (read), put (write) and delete (remove cache record) operations. The data format is JSON.",
     icon = "icon.svg",
     documentationRef = "https://docs.camunda.io/docs/components/connectors/out-of-the-box-connectors/available-connectors-overview/",
     propertyGroups = {
