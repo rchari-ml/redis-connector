@@ -26,21 +26,17 @@ public class GetHandler extends BaseHandler {
     public MyConnectorResult execute(MyConnectorRequest request){
         MyConnectorResult result = null;
 
-        // TODO - implement GET from Redis operation
-        if (true) {
-            LOGGER.info("TODO - GET operation is under construction...!");
+        LOGGER.info("TODO - GET operation is under construction...!");
 
-            validateAuthentication(request.authentication());
+        validateAuthentication(request.authentication());
 
-            result = runCommand(request.authentication(), request.key() );
-        }
+        result = runCommand(request.authentication(), request.key() );
 
         LOGGER.info("Result = {}", result);
         return result;
     }
 
     private MyConnectorResult runCommand(Authentication authentication, String key){
-        MyConnectorResult result = null;
 
         HostAndPort address = new HostAndPort( authentication.hostname(), Integer.parseInt( authentication.port().toString() ) );
         JedisClientConfig config = DefaultJedisClientConfig.builder()

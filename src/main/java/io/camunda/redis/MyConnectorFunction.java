@@ -40,7 +40,7 @@ public class MyConnectorFunction implements OutboundConnectorFunction {
 
   private MyConnectorResult executeConnector(final MyConnectorRequest connectorRequest) {
     // TODO: implement connector logic
-    LOGGER.info("Executing my connector with request {}", connectorRequest);
+    LOGGER.info("Executing my redis connector with request {}", connectorRequest);
     String key = connectorRequest.key();
     if (key != null && key.toLowerCase().startsWith("fail")) {
       throw new ConnectorException("FAIL", "Invalid key started with 'fail', was: " + key );

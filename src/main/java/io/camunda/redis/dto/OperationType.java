@@ -21,11 +21,7 @@ public enum OperationType {
         }
 
         // this is of same enum type
-        if (this.operationType == obj.getOperationType()
-                || this.operationType.equalsIgnoreCase( obj.getOperationType().toString() ) )
-            return true;
-
-        return false;
+        return  this.operationType.equalsIgnoreCase( obj.getOperationType() );
     }
 
     public String getOperationType() {
@@ -34,7 +30,7 @@ public enum OperationType {
 
     public static OperationType getOperationType(String code) {
         if (operationTypeMap == null) {
-            operationTypeMap = new HashMap<String, OperationType>();
+            operationTypeMap = new HashMap<>();
             operationTypeMap.put("get",     OperationType.GET);
             operationTypeMap.put("put",     OperationType.PUT);
             operationTypeMap.put("delete",  OperationType.DELETE);

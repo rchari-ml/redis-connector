@@ -18,20 +18,19 @@ public abstract class BaseHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(BaseHandler.class);
 
 
-    public static final BaseHandler getInstance(MyConnectorRequest connectorRequest){
-        if ( OperationType.GET == connectorRequest.operationType() ){
+    public static final BaseHandler getInstance(MyConnectorRequest connectorRequest) {
+        if (OperationType.GET == connectorRequest.operationType()) {
             LOGGER.info("Returning instance of GetHandler...");
             return new GetHandler();
         }
 
-        throw new ConnectorException("UNSUPPORTED", "Handler does not support this operation - " + connectorRequest.operationType() );
+        throw new ConnectorException("UNSUPPORTED", "Handler does not support this operation - " + connectorRequest.operationType());
     }
 
-    public void validateAuthentication(Authentication authentication){
+    public void validateAuthentication(Authentication authentication) {
 
-        if (Integer.parseInt( authentication.port().toString() ) <= 0)
-            throw new ConnectorException( "FAIL", "Invalid port number configuration" );
+        if (Integer.parseInt(authentication.port().toString()) <= 0)
+            throw new ConnectorException("FAIL", "Invalid port number configuration");
 
-        return;
     }
 }
