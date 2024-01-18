@@ -1,12 +1,14 @@
-package io.camunda.example;
+package io.camunda.redis;
 
 import io.camunda.connector.api.annotation.OutboundConnector;
 import io.camunda.connector.api.error.ConnectorException;
 import io.camunda.connector.api.outbound.OutboundConnectorContext;
 import io.camunda.connector.api.outbound.OutboundConnectorFunction;
 import io.camunda.connector.generator.java.annotation.ElementTemplate;
-import io.camunda.example.dto.MyConnectorRequest;
-import io.camunda.example.dto.MyConnectorResult;
+import io.camunda.redis.dto.MyConnectorRequest;
+import io.camunda.redis.dto.MyConnectorResult;
+import io.camunda.redis.handler.BaseHandler;
+import io.camunda.redis.handler.GetHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,6 +45,13 @@ public class MyConnectorFunction implements OutboundConnectorFunction {
     if (message != null && message.toLowerCase().startsWith("fail")) {
       throw new ConnectorException("FAIL", "My property started with 'fail', was: " + message);
     }
+
+    if (! message.startsWith("Hello")) {
+      LOGGER.info("Starting base handler...");
+      BaseHandler handler = BaseHandler.getInstance(connectorRequest);
+      handler.execute(connectorRequest);
+    }
+
     return new MyConnectorResult("Message received: " + message);
   }
 }

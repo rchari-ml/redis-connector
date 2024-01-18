@@ -1,4 +1,4 @@
-package io.camunda.example;
+package io.camunda.redis;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -7,9 +7,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.camunda.connector.api.error.ConnectorInputException;
 import io.camunda.connector.test.outbound.OutboundConnectorContextBuilder;
-import io.camunda.example.dto.Authentication;
-import io.camunda.example.dto.MyConnectorRequest;
-import io.camunda.example.dto.OperationType;
+import io.camunda.redis.dto.Authentication;
+import io.camunda.redis.dto.MyConnectorRequest;
+import io.camunda.redis.dto.OperationType;
 import org.junit.jupiter.api.Test;
 
 public class MyRequestTest {

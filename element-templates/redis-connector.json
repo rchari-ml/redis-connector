@@ -80,15 +80,15 @@
     },
     "type" : "Text"
   }, {
-    "id" : "operation",
-    "label" : "Operation",
+    "id" : "operationType",
+    "label" : "Operation type",
     "optional" : false,
     "constraints" : {
       "notEmpty" : true
     },
     "group" : "compose",
     "binding" : {
-      "name" : "operation",
+      "name" : "operationType",
       "type" : "zeebe:input"
     },
     "type" : "Dropdown",

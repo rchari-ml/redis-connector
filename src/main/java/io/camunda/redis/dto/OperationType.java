@@ -1,4 +1,4 @@
-package io.camunda.example.dto;
+package io.camunda.redis.dto;
 
 import java.util.Map;
 import java.util.HashMap;

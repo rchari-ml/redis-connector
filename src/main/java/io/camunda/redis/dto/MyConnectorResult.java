@@ -1,3 +1,3 @@
-package io.camunda.example.dto;
+package io.camunda.redis.dto;
 
 public record MyConnectorResult(String myProperty) {}

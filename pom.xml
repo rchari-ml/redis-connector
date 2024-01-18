@@ -232,7 +232,7 @@
         <artifactId>element-template-generator-maven-plugin</artifactId>
         <configuration>
           <connectorClasses>
-            <connectorClass>io.camunda.example.MyConnectorFunction</connectorClass>
+            <connectorClass>io.camunda.redis.MyConnectorFunction</connectorClass>
           </connectorClasses>
         </configuration>
       </plugin>
