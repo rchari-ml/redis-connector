@@ -13,14 +13,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @OutboundConnector(
-    name = "MYCONNECTOR",
-    inputVariables = {"authentication", "message", "operation", "key" },
+    name = "REDIS-CONNECTOR",
+    inputVariables = {"authentication", "operation", "key" },
     type = "io.camunda:template:1")
 @ElementTemplate(
     id = "io.camunda.connector.Template.v1",
     name = "Redis connector",
     version = 1,
-    description = "Redis connector allows to interact with Redis cache. It supports get (read), put (write) and delete (remove cache record) operations. The data format is JSON.",
+    description = "Redis connector allows to interact with Redis cache. It supports get (read), put (write) and delete (remove cache record) operations. Supported data format is <key,value> pair, where key is a valid String and value is JSON.",
     icon = "icon.svg",
     documentationRef = "https://docs.camunda.io/docs/components/connectors/out-of-the-box-connectors/available-connectors-overview/",
     propertyGroups = {
@@ -41,17 +41,14 @@ public class MyConnectorFunction implements OutboundConnectorFunction {
   private MyConnectorResult executeConnector(final MyConnectorRequest connectorRequest) {
     // TODO: implement connector logic
     LOGGER.info("Executing my connector with request {}", connectorRequest);
-    String message = connectorRequest.message();
-    if (message != null && message.toLowerCase().startsWith("fail")) {
-      throw new ConnectorException("FAIL", "My property started with 'fail', was: " + message);
+    String key = connectorRequest.key();
+    if (key != null && key.toLowerCase().startsWith("fail")) {
+      throw new ConnectorException("FAIL", "Invalid key started with 'fail', was: " + key );
     }
 
-    if (! message.startsWith("Hello")) {
-      LOGGER.info("Starting base handler...");
-      BaseHandler handler = BaseHandler.getInstance(connectorRequest);
-      handler.execute(connectorRequest);
-    }
+    LOGGER.info("Starting base handler...");
+    BaseHandler handler = BaseHandler.getInstance(connectorRequest);
+    return handler.execute(connectorRequest);
 
-    return new MyConnectorResult("Message received: " + message);
   }
 }

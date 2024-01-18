@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.camunda.connector.api.error.ConnectorInputException;
+import io.camunda.connector.api.error.ConnectorException;
 import io.camunda.connector.test.outbound.OutboundConnectorContextBuilder;
 import io.camunda.redis.dto.Authentication;
 import io.camunda.redis.dto.MyConnectorRequest;
@@ -20,8 +21,9 @@ public class MyRequestTest {
   void shouldReplaceTokenSecretWhenReplaceSecrets() throws JsonProcessingException {
     // given
     var input = new MyConnectorRequest(
-            "Hello World!", OperationType.GET, "key",
-            new Authentication("testUser", "secrets.MY_TOKEN")
+            OperationType.GET,
+            "key",
+            new Authentication("redis-fqdn-hostname", "80", "testUser", "secrets.MY_TOKEN")
     );
     var context = OutboundConnectorContextBuilder.create()
       .secret("MY_TOKEN", "token value")
@@ -40,7 +42,8 @@ public class MyRequestTest {
   void shouldFailWhenValidate_NoAuthentication() throws JsonProcessingException {
     // given
     var input = new MyConnectorRequest(
-            "Hello World!", OperationType.GET, "key",
+            OperationType.GET,
+            "key",
             null
     );
     var context = OutboundConnectorContextBuilder.create().variables(objectMapper.writeValueAsString(input)).build();
@@ -55,8 +58,9 @@ public class MyRequestTest {
   void shouldFailWhenValidate_NoToken() throws JsonProcessingException {
     // given
     var input = new MyConnectorRequest(
-            "Hello World!", OperationType.GET, "key",
-            new Authentication("testUser", null)
+            OperationType.GET,
+            "key",
+            new Authentication("redis-fqdn-hostname", "80", "testUser", null )
     );
     var context = OutboundConnectorContextBuilder.create().variables(objectMapper.writeValueAsString(input)).build();
     // when
@@ -67,26 +71,60 @@ public class MyRequestTest {
   }
 
   @Test
-  void shouldFailWhenValidate_NoMesage() throws JsonProcessingException {
+  void shouldFailWhenValidate_PortNumberInvalid() throws JsonProcessingException {
     // given
     var input = new MyConnectorRequest(
-            null, OperationType.GET, "key",
-            new Authentication("testUser", "testToken")
+            OperationType.GET,
+            "key",
+            new Authentication("redis-fqdn-hostname", "-1", "testUser", "test-value")
     );
     var context = OutboundConnectorContextBuilder.create().variables(objectMapper.writeValueAsString(input)).build();
     // when
     assertThatThrownBy(() -> context.bindVariables(MyConnectorRequest.class))
       // then
       .isInstanceOf(ConnectorInputException.class)
-      .hasMessageContaining("message");
+      .hasMessageContaining("port");
+  }
+
+  @Test
+  void shouldFailWhenValidate_PortNumberStartsWithZero() throws JsonProcessingException {
+    // given
+    var input = new MyConnectorRequest(
+            OperationType.GET,
+            "key",
+            new Authentication("redis-fqdn-hostname", "01", "testUser", "test-value")
+    );
+    var context = OutboundConnectorContextBuilder.create().variables(objectMapper.writeValueAsString(input)).build();
+    // when
+    assertThatThrownBy(() -> context.bindVariables(MyConnectorRequest.class))
+            // then
+            .isInstanceOf(ConnectorInputException.class)
+            .hasMessageContaining("port");
+  }
+
+  @Test
+  void shouldFailWhenValidate_PortNumberMinimumTwoDigits() throws JsonProcessingException {
+    // given
+    var input = new MyConnectorRequest(
+            OperationType.GET,
+            "key",
+            new Authentication("redis-fqdn-hostname", "8", "testUser", "test-value")
+    );
+    var context = OutboundConnectorContextBuilder.create().variables(objectMapper.writeValueAsString(input)).build();
+    // when
+    assertThatThrownBy(() -> context.bindVariables(MyConnectorRequest.class))
+            // then
+            .isInstanceOf(ConnectorInputException.class)
+            .hasMessageContaining("port");
   }
 
   @Test
   void shouldFailWhenValidate_TokenEmpty() throws JsonProcessingException {
     // given
     var input = new MyConnectorRequest(
-            "foo", OperationType.GET, "key",
-            new Authentication("testUser", "")
+            OperationType.GET,
+            "key",
+            new Authentication("redis-fqdn-hostname", "80", "testUser", "")
     );
     var context = OutboundConnectorContextBuilder.create().variables(objectMapper.writeValueAsString(input)).build();
     // when
@@ -100,8 +138,9 @@ public class MyRequestTest {
   void shouldFailWhenValidate_KeyEmpty() throws JsonProcessingException {
     // given
     var input = new MyConnectorRequest(
-            "foo", OperationType.GET, "",
-            new Authentication("testUser", "testToken")
+            OperationType.GET,
+            "",
+            new Authentication("redis-fqdn-hostname", "80", "testUser", "testToken")
     );
     var context = OutboundConnectorContextBuilder.create().variables(objectMapper.writeValueAsString(input)).build();
     // when

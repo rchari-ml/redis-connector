@@ -8,7 +8,6 @@ import jakarta.validation.constraints.NotNull;
 
 
 public record MyConnectorRequest(
-    @NotEmpty @TemplateProperty(group = "compose", type = PropertyType.Text)     String message,
     @NotNull  @TemplateProperty(group = "compose", type = PropertyType.Dropdown) OperationType operationType,
     @NotEmpty @TemplateProperty(group = "compose", type = PropertyType.Text)     String key,
     @Valid @NotNull Authentication authentication) {}

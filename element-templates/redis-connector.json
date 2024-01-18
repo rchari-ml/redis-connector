@@ -2,7 +2,7 @@
   "$schema" : "https://unpkg.com/@camunda/zeebe-element-templates-json-schema/resources/schema.json",
   "name" : "Redis connector",
   "id" : "io.camunda.connector.Template.v1",
-  "description" : "Redis connector allows to interact with Redis cache. It supports get (read), put (write) and delete (remove cache record) operations. The data format is JSON.",
+  "description" : "Redis connector allows to interact with Redis cache. It supports get (read), put (write) and delete (remove cache record) operations. Supported data format is <key,value> pair, where key is a valid String and value is JSON.",
   "documentationRef" : "https://docs.camunda.io/docs/components/connectors/out-of-the-box-connectors/available-connectors-overview/",
   "version" : 1,
   "category" : {
@@ -36,6 +36,40 @@
     },
     "type" : "Hidden"
   }, {
+    "id" : "authentication.hostname",
+    "label" : "Hostname",
+    "description" : "Host server name, preferably FQDN",
+    "optional" : false,
+    "constraints" : {
+      "notEmpty" : true
+    },
+    "feel" : "optional",
+    "group" : "authentication",
+    "binding" : {
+      "name" : "authentication.hostname",
+      "type" : "zeebe:input"
+    },
+    "type" : "String"
+  }, {
+    "id" : "authentication.port",
+    "label" : "Port",
+    "description" : "Port number",
+    "optional" : false,
+    "constraints" : {
+      "notEmpty" : true,
+      "minLength" : 2,
+      "pattern" : {
+        "value" : "^[1-9][0-9]*"
+      }
+    },
+    "feel" : "optional",
+    "group" : "authentication",
+    "binding" : {
+      "name" : "authentication.port",
+      "type" : "zeebe:input"
+    },
+    "type" : "String"
+  }, {
     "id" : "authentication.user",
     "label" : "Username",
     "description" : "The username for authentication",
@@ -53,7 +87,7 @@
   }, {
     "id" : "authentication.token",
     "label" : "Token",
-    "description" : "The token for authentication",
+    "description" : "The token or password for authentication",
     "optional" : false,
     "constraints" : {
       "notEmpty" : true
@@ -65,20 +99,6 @@
       "type" : "zeebe:input"
     },
     "type" : "String"
-  }, {
-    "id" : "message",
-    "label" : "Message",
-    "optional" : false,
-    "constraints" : {
-      "notEmpty" : true
-    },
-    "feel" : "optional",
-    "group" : "compose",
-    "binding" : {
-      "name" : "message",
-      "type" : "zeebe:input"
-    },
-    "type" : "Text"
   }, {
     "id" : "operationType",
     "label" : "Operation type",

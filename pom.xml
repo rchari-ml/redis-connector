@@ -62,6 +62,13 @@
       <optional>true</optional>
     </dependency>
 
+    <!-- Redis client library -->
+    <dependency>
+      <groupId>redis.clients</groupId>
+      <artifactId>jedis</artifactId>
+      <version>4.4.4</version>
+    </dependency>
+
     <!-- test dependencies -->
     <dependency>
       <groupId>io.camunda.connector</groupId>

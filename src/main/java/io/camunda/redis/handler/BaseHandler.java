@@ -1,10 +1,12 @@
 package io.camunda.redis.handler;
 
+import io.camunda.redis.dto.Authentication;
 import io.camunda.redis.dto.MyConnectorRequest;
 import io.camunda.redis.dto.MyConnectorResult;
 import io.camunda.redis.dto.OperationType;
 
 import io.camunda.connector.api.error.ConnectorException;
+import io.camunda.connector.api.error.ConnectorInputException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,5 +25,13 @@ public abstract class BaseHandler {
         }
 
         throw new ConnectorException("UNSUPPORTED", "Handler does not support this operation - " + connectorRequest.operationType() );
+    }
+
+    public void validateAuthentication(Authentication authentication){
+
+        if (Integer.parseInt( authentication.port().toString() ) <= 0)
+            throw new ConnectorException( "FAIL", "Invalid port number configuration" );
+
+        return;
     }
 }

@@ -17,31 +17,16 @@ public class MyFunctionTest {
   ObjectMapper objectMapper = new ObjectMapper();
 
   @Test
-  void shouldReturnReceivedMessageWhenExecute() throws Exception {
+  void shouldThrowWithErrorCodeWhenKeyStartsWithFail() throws Exception {
     // given
     var input = new MyConnectorRequest(
-            "Hello World!", OperationType.GET, "key",
-            new Authentication("testUser", "testToken")
-    );
-    var function = new MyConnectorFunction();
-    var context = OutboundConnectorContextBuilder.create()
-      .variables(objectMapper.writeValueAsString(input))
-      .build();
-    // when
-    var result = function.execute(context);
-    // then
-    assertThat(result)
-      .isInstanceOf(MyConnectorResult.class)
-      .extracting("myProperty")
-      .isEqualTo("Message received: Hello World!");
-  }
-
-  @Test
-  void shouldThrowWithErrorCodeWhenMessageStartsWithFail() throws Exception {
-    // given
-    var input = new MyConnectorRequest(
-            "Fail: unauthorized", OperationType.GET,  "key",
-            new Authentication("testUser", "testToken")
+            OperationType.GET,
+            "fail",
+            new Authentication(
+                        "redis-fqdn.cloud.redislabs.com",
+                        "80",
+                        "api-user-2",
+                        "test token" )
     );
     var function = new MyConnectorFunction();
     var context = OutboundConnectorContextBuilder.create()
@@ -52,27 +37,38 @@ public class MyFunctionTest {
     // then
     assertThat(result)
         .isInstanceOf(ConnectorException.class)
-        .hasMessageContaining("started with 'fail'")
+        .hasMessageContaining("Invalid key started with 'fail'")
         .extracting("errorCode").isEqualTo("FAIL");
   }
 
   @Test
-  void shouldThrowWithErrorCodeForGetOperation() throws Exception {
+  void shouldReturnJSONForGetOperation() throws Exception {
+
+    // For security, the details of the Redis server and access is read from env data.
     // given
     var input = new MyConnectorRequest(
-            "connection-string-url", OperationType.GET,  "key",
-            new Authentication("testUser", "testToken")
+            OperationType.GET,
+            "make-labs",
+            new Authentication(
+                          System.getenv("redisHost"),
+                          System.getenv("redisPort"),
+                          System.getenv("redisUser"),
+                          System.getenv("redisSecret") )
     );
     var function = new MyConnectorFunction();
     var context = OutboundConnectorContextBuilder.create()
             .variables(objectMapper.writeValueAsString(input))
             .build();
+
     // when
-    var result = catchThrowable(() -> function.execute(context));
+    var result = function.execute(context);
     // then
     assertThat(result)
-            .isInstanceOf(ConnectorException.class)
-            .hasMessageContaining("Redis GET operation is not yet supported")
-            .extracting("errorCode").isEqualTo("UNSUPPORTED");
+            .isInstanceOf(MyConnectorResult.class)
+            .extracting("jsonDataAsString")
+            .matches( p -> p.toString().indexOf("camunda-chapter-bengaluru") >= 0
+                            && p.toString().indexOf("makelabs.in") >= 0  )
+    ;
   }
+
 }
