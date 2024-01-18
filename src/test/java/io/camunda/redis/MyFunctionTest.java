@@ -16,6 +16,13 @@ public class MyFunctionTest {
 
   ObjectMapper objectMapper = new ObjectMapper();
 
+  // Use below values only for scenarios for successful operations against Redis.
+  // Make sure to set the env using the linux command: export a=value-for-a
+  public static final String redisHost    = System.getenv("redisHost");
+  public static final String redisPort    = System.getenv("redisPort");
+  public static final String redisUser    = System.getenv("redisUser");
+  public static final String redisSecret  = System.getenv("redisSecret");
+
   @Test
   void shouldThrowWithErrorCodeWhenKeyStartsWithFail() throws Exception {
     // given
@@ -42,7 +49,35 @@ public class MyFunctionTest {
   }
 
   @Test
-  void shouldReturnJSONForGetOperation() throws Exception {
+  void shouldWarn_NoDataFoundForKey() throws Exception {
+
+    // For security, the details of the Redis server and access is read from env data.
+    // given
+    var input = new MyConnectorRequest(
+            OperationType.GET,
+            "no-data",
+            new Authentication(
+                    redisHost,
+                    redisPort,
+                    redisUser,
+                    redisSecret )
+    );
+    var function = new MyConnectorFunction();
+    var context = OutboundConnectorContextBuilder.create()
+            .variables(objectMapper.writeValueAsString(input))
+            .build();
+
+    // when
+    var result = function.execute(context);
+    // then
+    assertThat(result)
+            .isInstanceOf(MyConnectorResult.class)
+            .extracting("jsonDataAsString")
+            .isEqualTo( null )
+    ;
+  }
+  @Test
+  void shouldReturnJSONDataForGetOperation() throws Exception {
 
     // For security, the details of the Redis server and access is read from env data.
     // given
@@ -50,10 +85,10 @@ public class MyFunctionTest {
             OperationType.GET,
             "make-labs",
             new Authentication(
-                          System.getenv("redisHost"),
-                          System.getenv("redisPort"),
-                          System.getenv("redisUser"),
-                          System.getenv("redisSecret") )
+                          redisHost,
+                          redisPort,
+                          redisUser,
+                          redisSecret )
     );
     var function = new MyConnectorFunction();
     var context = OutboundConnectorContextBuilder.create()
